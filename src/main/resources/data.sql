@@ -1,0 +1,16 @@
+INSERT INTO category (description) VALUES ('Scandinavian');
+INSERT INTO category (description) VALUES ('French');
+INSERT INTO category (description) VALUES ('Italian');
+INSERT INTO category (description) VALUES ('Mexican');
+INSERT INTO category (description) VALUES ('Asian');
+INSERT INTO category (description) VALUES ('Fast Food');
+INSERT INTO unit_of_measure (description) VALUES ('tsp');
+INSERT INTO unit_of_measure (description) VALUES ('tblsp');
+INSERT INTO unit_of_measure (description) VALUES ('cup');
+INSERT INTO unit_of_measure (description) VALUES ('pinch');
+INSERT INTO unit_of_measure (description) VALUES ('ounce');
+INSERT INTO unit_of_measure (description) VALUES ('g');
+INSERT INTO unit_of_measure (description) VALUES ('l');
+INSERT INTO unit_of_measure (description) VALUES ('dl');
+INSERT INTO unit_of_measure (description) VALUES ('ml');
+INSERT INTO unit_of_measure (description) VALUES ('pcs');
