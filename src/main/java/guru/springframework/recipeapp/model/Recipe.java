@@ -111,6 +111,17 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
+    public Recipe addIngredient(Ingredient ingredient) {
+        ingredient.setRecipe(this);
+        this.ingredients.add(ingredient);
+        return this;
+    }
+
+    public Recipe deleteIngredient(Ingredient ingredient) {
+        this.ingredients.removeIf(savedIngredient -> savedIngredient.getId().equals(ingredient.getId()));
+        return this;
+    }
+
     public Byte[] getImage() {
         return image;
     }
@@ -133,6 +144,9 @@ public class Recipe {
 
     public void setNotes(Notes notes) {
         this.notes = notes;
+        if (notes.getRecipe() != this) {
+            notes.setRecipe(this);
+        }
     }
 
     public Set<Category> getCategories() {

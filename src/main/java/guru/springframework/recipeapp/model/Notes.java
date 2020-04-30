@@ -18,6 +18,10 @@ public class Notes {
     public Notes() {
     }
 
+    public Notes(String recipeNotes) {
+        this.recipeNotes = recipeNotes;
+    }
+
     public Notes(String recipeNotes, Recipe recipe) {
         this.recipeNotes = recipeNotes;
         this.recipe = recipe;

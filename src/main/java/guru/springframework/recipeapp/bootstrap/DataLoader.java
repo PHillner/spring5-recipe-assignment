@@ -67,18 +67,18 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         guacamole.setDifficulty(Difficulty.EASY);
         guacamole.setNotes(new Notes("Be careful handling chiles if using." +
                 " Wash your hands thoroughly after handling and do not touch your eyes" +
-                " or the area near your eyes with your hands for several hours.", guacamole));
+                " or the area near your eyes with your hands for several hours."));
 
-        guacamole.getIngredients().add(new Ingredient("ripe avocados", new BigDecimal(2), piecesUnit, guacamole));
-        guacamole.getIngredients().add(new Ingredient("of salt, more to taste", new BigDecimal("0.25"), teaspoonUnit, guacamole));
-        guacamole.getIngredients().add(new Ingredient("fresh lime juice or lemon juice", new BigDecimal(1), tablespoonUnit, guacamole));
-        guacamole.getIngredients().add(new Ingredient("of minced red onion or thinly sliced green onion", new BigDecimal(2), tablespoonUnit, guacamole));
-        guacamole.getIngredients().add(new Ingredient("serrano chiles, stems and seeds removed, minced", new BigDecimal(1), piecesUnit, guacamole));
-        guacamole.getIngredients().add(new Ingredient("cilantro (leaves and tender stems), finely chopped", new BigDecimal(2), tablespoonUnit, guacamole));
-        guacamole.getIngredients().add(new Ingredient("of freshly grated black pepper", new BigDecimal(1), dashUnit, guacamole));
-        guacamole.getIngredients().add(new Ingredient("ripe tomato, seeds and pulp removed, chopped", new BigDecimal("0.5"), piecesUnit, guacamole));
-        guacamole.getIngredients().add(new Ingredient("Red radishes or jicama, to garnish", new BigDecimal(1), piecesUnit, guacamole));
-        guacamole.getIngredients().add(new Ingredient("Tortilla chips, to serve", new BigDecimal(1), piecesUnit, guacamole));
+        guacamole.addIngredient(new Ingredient("ripe avocados", new BigDecimal(2), piecesUnit));
+        guacamole.addIngredient(new Ingredient("of salt, more to taste", new BigDecimal("0.25"), teaspoonUnit));
+        guacamole.addIngredient(new Ingredient("fresh lime juice or lemon juice", new BigDecimal(1), tablespoonUnit));
+        guacamole.addIngredient(new Ingredient("of minced red onion or thinly sliced green onion", new BigDecimal(2), tablespoonUnit));
+        guacamole.addIngredient(new Ingredient("serrano chiles, stems and seeds removed, minced", new BigDecimal(1), piecesUnit));
+        guacamole.addIngredient(new Ingredient("cilantro (leaves and tender stems), finely chopped", new BigDecimal(2), tablespoonUnit));
+        guacamole.addIngredient(new Ingredient("of freshly grated black pepper", new BigDecimal(1), dashUnit));
+        guacamole.addIngredient(new Ingredient("ripe tomato, seeds and pulp removed, chopped", new BigDecimal("0.5"), piecesUnit));
+        guacamole.addIngredient(new Ingredient("Red radishes or jicama, to garnish", new BigDecimal(1), piecesUnit));
+        guacamole.addIngredient(new Ingredient("Tortilla chips, to serve", new BigDecimal(1), piecesUnit));
 
         guacamole.setDirections("1 Cut the avocado, remove flesh: Cut the avocados in half. Remove the pit." +
                 " Score the inside of the avocado with a blunt knife and scoop out the flesh with a spoon. (See How to Cut and Peel an Avocado.) Place in a bowl.\n" +
@@ -115,28 +115,28 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         tacos.setDifficulty(Difficulty.MODERATE);
         tacos.setNotes(new Notes("Look for ancho chile powder with the Mexican ingredients at your grocery store," +
                 " on buy it online. (If you can't find ancho chili powder, you replace the ancho chili, the oregano," +
-                " and the cumin with 2 1/2 tablespoons regular chili powder, though the flavor won't be quite the same.)", tacos));
+                " and the cumin with 2 1/2 tablespoons regular chili powder, though the flavor won't be quite the same.)"));
 
-        tacos.getIngredients().add(new Ingredient("ancho chili powder", new BigDecimal(2), tablespoonUnit, tacos));
-        tacos.getIngredients().add(new Ingredient("dried oregano", new BigDecimal(1), teaspoonUnit, tacos));
-        tacos.getIngredients().add(new Ingredient("dried cumin", new BigDecimal(1), teaspoonUnit, tacos));
-        tacos.getIngredients().add(new Ingredient("sugar", new BigDecimal(1), teaspoonUnit, tacos));
-        tacos.getIngredients().add(new Ingredient("salt", new BigDecimal("0.5"), teaspoonUnit, tacos));
-        tacos.getIngredients().add(new Ingredient("clove garlic, finely chopped", new BigDecimal(1), piecesUnit, tacos));
-        tacos.getIngredients().add(new Ingredient("finely grated orange zest", new BigDecimal(1), tablespoonUnit, tacos));
-        tacos.getIngredients().add(new Ingredient("fresh-squeezed orange juice", new BigDecimal(3), tablespoonUnit, tacos));
-        tacos.getIngredients().add(new Ingredient("olive oil", new BigDecimal(2), tablespoonUnit, tacos));
-        tacos.getIngredients().add(new Ingredient("skinless, boneless chicken thighs (1 1/4 pounds)", new BigDecimal(4), piecesUnit, tacos));
+        tacos.addIngredient(new Ingredient("ancho chili powder", new BigDecimal(2), tablespoonUnit));
+        tacos.addIngredient(new Ingredient("dried oregano", new BigDecimal(1), teaspoonUnit));
+        tacos.addIngredient(new Ingredient("dried cumin", new BigDecimal(1), teaspoonUnit));
+        tacos.addIngredient(new Ingredient("sugar", new BigDecimal(1), teaspoonUnit));
+        tacos.addIngredient(new Ingredient("salt", new BigDecimal("0.5"), teaspoonUnit));
+        tacos.addIngredient(new Ingredient("clove garlic, finely chopped", new BigDecimal(1), piecesUnit));
+        tacos.addIngredient(new Ingredient("finely grated orange zest", new BigDecimal(1), tablespoonUnit));
+        tacos.addIngredient(new Ingredient("fresh-squeezed orange juice", new BigDecimal(3), tablespoonUnit));
+        tacos.addIngredient(new Ingredient("olive oil", new BigDecimal(2), tablespoonUnit));
+        tacos.addIngredient(new Ingredient("skinless, boneless chicken thighs (1 1/4 pounds)", new BigDecimal(4), piecesUnit));
 
-        tacos.getIngredients().add(new Ingredient("small corn tortillas", new BigDecimal(8), piecesUnit, tacos));
-        tacos.getIngredients().add(new Ingredient("packed baby arugula (3 ounces)", new BigDecimal(3), cupUnit, tacos));
-        tacos.getIngredients().add(new Ingredient("medium ripe avocados, sliced", new BigDecimal(2), piecesUnit, tacos));
-        tacos.getIngredients().add(new Ingredient("radishes, thinly sliced", new BigDecimal(4), piecesUnit, tacos));
-        tacos.getIngredients().add(new Ingredient("cherry tomatoes, halved", new BigDecimal(".5"), pintUnit, tacos));
-        tacos.getIngredients().add(new Ingredient("ed onion, thinly sliced", new BigDecimal(".25"), piecesUnit, tacos));
-        tacos.getIngredients().add(new Ingredient("Roughly chopped cilantro", new BigDecimal(1), piecesUnit, tacos));
-        tacos.getIngredients().add(new Ingredient("sour cream thinned with 1/4 cup milk", new BigDecimal(".5"), cupUnit, tacos));
-        tacos.getIngredients().add(new Ingredient("lime, cut into wedges", new BigDecimal(1), piecesUnit, tacos));
+        tacos.addIngredient(new Ingredient("small corn tortillas", new BigDecimal(8), piecesUnit));
+        tacos.addIngredient(new Ingredient("packed baby arugula (3 ounces)", new BigDecimal(3), cupUnit));
+        tacos.addIngredient(new Ingredient("medium ripe avocados, sliced", new BigDecimal(2), piecesUnit));
+        tacos.addIngredient(new Ingredient("radishes, thinly sliced", new BigDecimal(4), piecesUnit));
+        tacos.addIngredient(new Ingredient("cherry tomatoes, halved", new BigDecimal(".5"), pintUnit));
+        tacos.addIngredient(new Ingredient("ed onion, thinly sliced", new BigDecimal(".25"), piecesUnit));
+        tacos.addIngredient(new Ingredient("Roughly chopped cilantro", new BigDecimal(1), piecesUnit));
+        tacos.addIngredient(new Ingredient("sour cream thinned with 1/4 cup milk", new BigDecimal(".5"), cupUnit));
+        tacos.addIngredient(new Ingredient("lime, cut into wedges", new BigDecimal(1), piecesUnit));
 
         tacos.setDirections("1 Prepare a gas or charcoal grill for medium-high, direct heat.\n" +
                 "\n" +
