@@ -4,13 +4,16 @@ import guru.springframework.recipeapp.model.*;
 import guru.springframework.recipeapp.repositories.CategoryRepository;
 import guru.springframework.recipeapp.repositories.RecipeRepository;
 import guru.springframework.recipeapp.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
 
+@Slf4j
 @Component
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -25,13 +28,16 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         recipeRepository.saveAll(getRecipes());
+        log.debug("Loading data");
     }
 
     private List<Recipe> getRecipes() {
 
         List<Recipe> recipes = new ArrayList<>();
+        log.debug("Fetching units and categories to be used in recipes...");
 
         // Get UOMs
         Optional<UnitOfMeasure> teaspoonUnitOptional = unitOfMeasureRepository.findByDescription("tsp");
@@ -52,12 +58,15 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         Optional<UnitOfMeasure> piecesUnitOptional = unitOfMeasureRepository.findByDescription("pcs");
         if (piecesUnitOptional.isEmpty()) throw new RuntimeException("Pieces unit not in db");
         UnitOfMeasure piecesUnit = piecesUnitOptional.get();
+        log.debug("Units of measure... Done");
 
         // Get category
         Optional<Category> mexicanCategoryOptional = categoryRepository.findByDescription("Mexican");
         if (mexicanCategoryOptional.isEmpty()) throw new RuntimeException("Mexican category not in db");
         Category mexCategory = mexicanCategoryOptional.get();
+        log.debug("Categories... Done");
 
+        log.debug("Initializing recipes...");
         //// ---------------------------
         //// Add guacamole recipe
         Recipe guacamole = new Recipe();
@@ -104,6 +113,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         guacamole.getCategories().add(mexCategory);
 
         recipes.add(guacamole);
+        log.debug("Guacamole... Done");
 
         //// ---------------------------
         //// Add tacos recipe
@@ -162,6 +172,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         tacos.getCategories().add(mexCategory);
 
         recipes.add(tacos);
+        log.debug("Tacos... Done");
+        log.debug("Adding recipes... Done");
 
         return recipes;
     }
