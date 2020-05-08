@@ -5,7 +5,9 @@ import guru.springframework.recipeapp.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -18,29 +20,10 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Iterable<Recipe> findAll() {
+    public Set<Recipe> getRecipes() {
         log.debug("Fetching recipes");
-        return recipeRepository.findAll();
-    }
-
-    @Override
-    public Recipe findById(Long id) {
-        Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
-        return optionalRecipe.orElse(null);
-    }
-
-    @Override
-    public Recipe save(Recipe recipe) {
-        return recipeRepository.save(recipe);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        recipeRepository.deleteById(id);
-    }
-
-    @Override
-    public void delete(Recipe recipe) {
-        deleteById(recipe.getId());
+        Set<Recipe> recipeSet = new HashSet<>();
+        recipeRepository.findAll().iterator().forEachRemaining(recipeSet::add);
+        return recipeSet;
     }
 }
