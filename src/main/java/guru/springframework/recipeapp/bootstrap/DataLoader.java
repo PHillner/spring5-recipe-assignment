@@ -86,8 +86,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         guacamole.addIngredient(new Ingredient("cilantro (leaves and tender stems), finely chopped", new BigDecimal(2), tablespoonUnit));
         guacamole.addIngredient(new Ingredient("of freshly grated black pepper", new BigDecimal(1), dashUnit));
         guacamole.addIngredient(new Ingredient("ripe tomato, seeds and pulp removed, chopped", new BigDecimal("0.5"), piecesUnit));
-        guacamole.addIngredient(new Ingredient("Red radishes or jicama, to garnish", new BigDecimal(1), piecesUnit));
-        guacamole.addIngredient(new Ingredient("Tortilla chips, to serve", new BigDecimal(1), piecesUnit));
+        guacamole.addIngredient(new Ingredient("red radishes or jicama, to garnish", new BigDecimal(1), piecesUnit));
+        guacamole.addIngredient(new Ingredient("tortilla chips, to serve", new BigDecimal(1), piecesUnit));
 
         guacamole.setDirections("1 Cut the avocado, remove flesh: Cut the avocados in half. Remove the pit." +
                 " Score the inside of the avocado with a blunt knife and scoop out the flesh with a spoon. (See How to Cut and Peel an Avocado.) Place in a bowl.\n" +
@@ -144,7 +144,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         tacos.addIngredient(new Ingredient("radishes, thinly sliced", new BigDecimal(4), piecesUnit));
         tacos.addIngredient(new Ingredient("cherry tomatoes, halved", new BigDecimal(".5"), pintUnit));
         tacos.addIngredient(new Ingredient("ed onion, thinly sliced", new BigDecimal(".25"), piecesUnit));
-        tacos.addIngredient(new Ingredient("Roughly chopped cilantro", new BigDecimal(1), piecesUnit));
+        tacos.addIngredient(new Ingredient("roughly chopped cilantro", new BigDecimal(1), piecesUnit));
         tacos.addIngredient(new Ingredient("sour cream thinned with 1/4 cup milk", new BigDecimal(".5"), cupUnit));
         tacos.addIngredient(new Ingredient("lime, cut into wedges", new BigDecimal(1), piecesUnit));
 

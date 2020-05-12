@@ -38,4 +38,27 @@ public class Ingredient {
         this.recipe = recipe;
     }
 
+    public String toString() {
+        String unitString = " ";
+        switch (uom.getDescription()) {
+            case "each":
+            case "pcs":
+                unitString = "";
+                break;
+            default:
+                unitString += uom.getDescription();
+                break;
+        }
+        String amountString = "";
+        switch (amount.remainder(BigDecimal.ONE).toString()) {
+            case "0.00":
+                amountString = amount.toBigInteger().toString();
+                break;
+            default:
+                amountString = amount.toString();
+                break;
+        }
+        return String.format("%s%s %s", amountString, unitString, description);
+    }
+
 }

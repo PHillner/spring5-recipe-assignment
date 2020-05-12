@@ -33,20 +33,27 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Description</th>
+                                <th />
                             </tr>
                             </thead>
-                            <tr th:each="recipe : ${recipes}">
-                                <td th:text="${recipe.id}">1</td>
-                                <td th:text="${recipe.description}">This is a pretty nice recipe! Try this out!</td>
-                            </tr>
-                            <tr th:remove="all">
-                                <td th:text="${recipe.id}">2</td>
-                                <td th:text="${recipe.description}">Another nice recipe!</td>
-                            </tr>
-                            <tr th:remove="all">
-                                <td th:text="${recipe.id}">3</td>
-                                <td th:text="${recipe.description}">Yet another nice recipe! Do they ever end?</td>
-                            </tr>
+                            <tbody th:remove="all-but-first">
+                                <tr th:each="recipe : ${recipes}">
+                                    <!--/*@thymesVar id="recipe" type"guru.springframework.domain.Recipe"*/-->
+                                    <td th:text="${recipe.id}">1</td>
+                                    <td th:text="${recipe.description}">This is a pretty nice recipe! Try this out!</td>
+                                    <td><a href="#" th:href="@{'/recipe/'+${recipe.id}+'/'}">View</a></td>
+                                </tr>
+                                <tr><!-- Test-->
+                                    <td>2</td>
+                                    <td>Another nice recipe!</td>
+                                    <td><a href="#">View</a></td>
+                                </tr>
+                                <tr><!-- Test-->
+                                    <td>3</td>
+                                    <td>Yet another nice recipe! Do they ever end?</td>
+                                    <td><a href="#">View</a></td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
