@@ -30,8 +30,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        recipeRepository.saveAll(getRecipes());
         log.debug("Loading data");
+        recipeRepository.saveAll(getRecipes());
     }
 
     private List<Recipe> getRecipes() {

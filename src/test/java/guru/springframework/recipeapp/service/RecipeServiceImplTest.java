@@ -1,5 +1,7 @@
 package guru.springframework.recipeapp.service;
 
+import guru.springframework.recipeapp.converters.RecipeCommandToRecipeConverter;
+import guru.springframework.recipeapp.converters.RecipeToRecipeCommandConverter;
 import guru.springframework.recipeapp.model.Recipe;
 import guru.springframework.recipeapp.repositories.RecipeRepository;
 import guru.springframework.recipeapp.services.RecipeServiceImpl;
@@ -20,6 +22,10 @@ public class RecipeServiceImplTest {
 
     RecipeServiceImpl recipeService;
 
+    RecipeCommandToRecipeConverter commandToRecipeConverter;
+
+    RecipeToRecipeCommandConverter recipeToRecipeCommandConverter;
+
     @Mock
     RecipeRepository recipeRepository;
 
@@ -28,11 +34,11 @@ public class RecipeServiceImplTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        recipeService = new RecipeServiceImpl(recipeRepository);
+        recipeService = new RecipeServiceImpl(recipeRepository, commandToRecipeConverter, recipeToRecipeCommandConverter);
     }
 
     @Test
-    public void getRecipes() throws Exception {
+    public void testGetRecipes() throws Exception {
 
         Recipe recipe = new Recipe();
         Set<Recipe> receipesData = new HashSet<>();
@@ -47,7 +53,7 @@ public class RecipeServiceImplTest {
     }
 
     @Test
-    public void getRecipeById() throws Exception {
+    public void testFindById() throws Exception {
 
         Recipe recipe = new Recipe();
         recipe.setId(1L);
@@ -59,6 +65,15 @@ public class RecipeServiceImplTest {
 
         assertNotNull(returnedRecipe, "Null recipe returned");
         verify(recipeRepository).findById(anyLong());
+    }
+
+    @Test
+    public void testDeleteById() throws Exception {
+
+        Long id = 2L;
+        recipeService.deleteById(id);
+
+        verify(recipeRepository).deleteById(anyLong());
     }
 
 }

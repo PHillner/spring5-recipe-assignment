@@ -24,7 +24,15 @@
             <div class="panel-group">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h1 class="panel-title" th:text="${recipe.description}">Here is some short descriptive text of the recipe.</h1>
+                        <div class="row">
+                            <div class="col-md-10 ">
+                                <h1 class="panel-title" th:text="${recipe.description}">Here is some short descriptive text of the recipe.</h1>
+                            </div>
+                            <div class="col-md-2">
+                                <a class="btn btn-default btn-xs" th:href="@{'/recipe/'+${recipe.id}+'/edit'}" role="button">Edit</a>
+                                <a class="btn btn-danger btn-xs" th:href="@{'/recipe/'+${recipe.id}+'/remove'}" role="button">Remove</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="panel-body">
                         <div class="row">
