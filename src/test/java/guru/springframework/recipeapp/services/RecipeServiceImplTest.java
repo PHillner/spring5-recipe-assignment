@@ -1,10 +1,9 @@
-package guru.springframework.recipeapp.service;
+package guru.springframework.recipeapp.services;
 
 import guru.springframework.recipeapp.converters.RecipeCommandToRecipeConverter;
 import guru.springframework.recipeapp.converters.RecipeToRecipeCommandConverter;
 import guru.springframework.recipeapp.model.Recipe;
 import guru.springframework.recipeapp.repositories.RecipeRepository;
-import guru.springframework.recipeapp.services.RecipeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

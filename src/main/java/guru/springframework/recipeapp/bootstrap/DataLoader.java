@@ -143,7 +143,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         tacos.addIngredient(new Ingredient("medium ripe avocados, sliced", new BigDecimal(2), piecesUnit));
         tacos.addIngredient(new Ingredient("radishes, thinly sliced", new BigDecimal(4), piecesUnit));
         tacos.addIngredient(new Ingredient("cherry tomatoes, halved", new BigDecimal(".5"), pintUnit));
-        tacos.addIngredient(new Ingredient("ed onion, thinly sliced", new BigDecimal(".25"), piecesUnit));
+        tacos.addIngredient(new Ingredient("red onion, thinly sliced", new BigDecimal(".25"), piecesUnit));
         tacos.addIngredient(new Ingredient("roughly chopped cilantro", new BigDecimal(1), piecesUnit));
         tacos.addIngredient(new Ingredient("sour cream thinned with 1/4 cup milk", new BigDecimal(".5"), cupUnit));
         tacos.addIngredient(new Ingredient("lime, cut into wedges", new BigDecimal(1), piecesUnit));

@@ -29,8 +29,10 @@
                                 <h1 class="panel-title" th:text="${recipe.description}">Here is some short descriptive text of the recipe.</h1>
                             </div>
                             <div class="col-md-2">
-                                <a class="btn btn-default btn-xs" th:href="@{'/recipe/'+${recipe.id}+'/edit'}" role="button">Edit</a>
-                                <a class="btn btn-danger btn-xs" th:href="@{'/recipe/'+${recipe.id}+'/remove'}" role="button">Remove</a>
+                                <div class="btn-group-xs">
+                                    <a class="btn btn-default" th:href="@{'/recipe/'+${recipe.id}+'/edit'}" role="button">Edit</a>
+                                    <a class="btn btn-danger" th:href="@{'/recipe/'+${recipe.id}+'/remove'}" role="button">Remove</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -93,7 +95,14 @@
                 </div>
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h1 class="panel-title">Ingredients</h1>
+                        <div class="row">
+                            <div class="col-md-11">
+                                <h1 class="panel-title">Ingredients</h1>
+                            </div>
+                            <div class="col-md-1">
+                                <a class="btn btn-default btn-xs" href="#" th:href="@{'/recipe/'+${recipe.id}+'/ingredients'}" role="button">View</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="panel-body">
                         <div class="row">
