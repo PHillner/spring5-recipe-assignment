@@ -45,6 +45,7 @@ public class RecipeToRecipeCommandConverter implements Converter<Recipe, RecipeC
                 source.getIngredients().stream()
                         .map(i -> toIngredientCommandConverter.convert(i)).collect(Collectors.toSet())
         );
+        command.setImage(source.getImage());
         command.setDifficulty(source.getDifficulty());
         command.setNotes(toNotesCommandConverter.convert(source.getNotes()));
         command.setCategories(

@@ -41,12 +41,18 @@
                             <div class="col-md-3">
                                 <h5>Categories:</h5>
                             </div>
-                            <div class="col-md-9">
+                            <div class="col-md-3">
                                 <ul th:each="category : ${recipe.categories}" th:remove="all-but-first">
                                     <li th:text="${category.description}">category 1</li>
                                     <li>category 2</li><!-- Test-->
                                     <li>category 3</li><!-- Test-->
                                 </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <img src="../../static/images/guacamole.jpg"
+                                     th:src="@{'/recipe/' + ${recipe.id} + '/recipe-image'}"
+                                     width="200">
+                                <a class="btn btn-default" th:href="@{'/recipe/'+${recipe.id}+'/image'}" methods role="button">Change image</a>
                             </div>
                         </div>
                         <div class="row">
