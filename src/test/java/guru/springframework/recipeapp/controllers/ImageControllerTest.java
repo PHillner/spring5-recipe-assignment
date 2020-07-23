@@ -69,7 +69,7 @@ class ImageControllerTest {
     }
 
     @Test
-    void renderImageFromDB() throws Exception {
+    void testRenderImageFromDB() throws Exception {
         RecipeCommand command = new RecipeCommand();
         command.setId(1L);
 
@@ -93,5 +93,19 @@ class ImageControllerTest {
         byte[] responseBytes = response.getContentAsByteArray();
 
         assertEquals(s.getBytes().length, responseBytes.length);
+    }
+
+    @Test
+    void testRenderOnionsImage() throws Exception {
+        byte[] bytes = "test image".getBytes();
+
+        when(imageService.getOnionsImage()).thenReturn(bytes);
+
+        MockHttpServletResponse response = mockMvc.perform(get("/error/onions"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse();
+        byte[] responseBytes = response.getContentAsByteArray();
+
+        assertTrue(responseBytes.length > 0, "Image byte count should be > 0");
     }
 }

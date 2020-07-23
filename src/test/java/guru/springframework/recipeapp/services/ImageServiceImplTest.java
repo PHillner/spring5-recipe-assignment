@@ -52,4 +52,12 @@ class ImageServiceImplTest {
         Recipe savedRecipe = argumentCaptor.getValue();
         assertEquals(multipartFile.getBytes().length, savedRecipe.getImage().length);
     }
+
+    @Test
+    void get404ImageFile() throws IOException {
+        assertDoesNotThrow(
+                () -> imageService.getOnionsImage(),
+                "Expected to get byte[] of an image"
+        );
+    }
 }

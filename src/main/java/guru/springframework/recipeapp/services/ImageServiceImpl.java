@@ -4,9 +4,13 @@ import guru.springframework.recipeapp.model.Recipe;
 import guru.springframework.recipeapp.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Slf4j
 @Service
@@ -36,5 +40,15 @@ public class ImageServiceImpl implements ImageService {
             log.error("Failed to save image", e);
         }
         log.debug("Image saved");
+    }
+
+    public byte[] getOnionsImage() {
+        URL url = this.getClass().getClassLoader()
+                .getResource("static/images/sliced-onion-420x420.jpg");
+        try (Reader reader = new FileReader(url.getFile(), UTF_8)) {
+            return FileCopyUtils.copyToByteArray(new FileInputStream(url.getFile()));
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 }

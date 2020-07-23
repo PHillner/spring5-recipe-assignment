@@ -7,10 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -59,10 +56,25 @@ public class ImageController {
                 byteArray[i++] = wrappedByte;
             }
 
-            response.setContentType("image/jpeg");
-            InputStream is = new ByteArrayInputStream(byteArray);
-            IOUtils.copy(is, response.getOutputStream());
-            is.close();
+            returnImage(response, byteArray);
         }
+    }
+
+    /**
+     * Used in error pages to simulate crying
+     * @param response
+     * @throws IOException
+     */
+    @GetMapping("error/onions")
+    public void renderOnionsImage(HttpServletResponse response) throws IOException {
+        log.debug("Fetching error image - onions");
+        returnImage(response, imageService.getOnionsImage());
+    }
+
+    private void returnImage(HttpServletResponse response, byte[] image) throws IOException {
+        response.setContentType("image/jpeg");
+        InputStream is = new ByteArrayInputStream(image);
+        IOUtils.copy(is, response.getOutputStream());
+        is.close();
     }
 }
