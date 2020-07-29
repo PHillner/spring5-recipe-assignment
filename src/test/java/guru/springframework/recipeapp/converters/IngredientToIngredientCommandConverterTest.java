@@ -12,10 +12,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class IngredientToIngredientCommandConverterTest {
 
-    public static final Long ID_INGREDIENT_VALUE = 1L;
+    public static final String ID_INGREDIENT_VALUE = "1";
     public static final String DESCRIPTION_INGREDIENT_VALUE = "ingredient description";
     public static final BigDecimal AMOUNT = BigDecimal.ONE;
-    public static final Long UOM_ID = 2L;
+    public static final String UOM_ID = "2";
 
     IngredientToIngredientCommandConverter converter;
 

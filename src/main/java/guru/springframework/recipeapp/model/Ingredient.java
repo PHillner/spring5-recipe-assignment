@@ -1,26 +1,21 @@
 package guru.springframework.recipeapp.model;
 
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Data
-@EqualsAndHashCode(exclude = {"recipe"})
-@Entity
+@Getter
+@Setter
 public class Ingredient {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String description;
     private BigDecimal amount;
 
-    @OneToOne
+    @DBRef
     private UnitOfMeasure uom;
-
-    @ManyToOne
-    private Recipe recipe;
+//    private Recipe recipe;
 
     public Ingredient() {
     }
@@ -35,7 +30,7 @@ public class Ingredient {
         this.description = description;
         this.amount = amount;
         this.uom = uom;
-        this.recipe = recipe;
+//        this.recipe = recipe;
     }
 
     public String toString() {

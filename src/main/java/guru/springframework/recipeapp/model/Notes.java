@@ -2,22 +2,13 @@ package guru.springframework.recipeapp.model;
 
 import lombok.*;
 
-import javax.persistence.*;
-
-@Data
-@EqualsAndHashCode(exclude = {"recipe"})
-@Entity
+@Getter
+@Setter
 public class Notes {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Lob
+    private String id;
     private String recipeNotes;
-
-    @OneToOne
-    private Recipe recipe;
+//    private Recipe recipe;
 
     public Notes() {
     }
@@ -26,9 +17,9 @@ public class Notes {
         this.recipeNotes = recipeNotes;
     }
 
-    public Notes(String recipeNotes, Recipe recipe) {
-        this.recipeNotes = recipeNotes;
-        this.recipe = recipe;
-    }
+//    public Notes(String recipeNotes, Recipe recipe) {
+//        this.recipeNotes = recipeNotes;
+//        this.recipe = recipe;
+//    }
 
 }

@@ -18,7 +18,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -35,10 +35,10 @@ class IngredientServiceImplTest {
     private final IngredientToIngredientCommandConverter ingredientToIngredientCommandConverter;
     private final IngredientCommandToIngredientConverter commandToIngredientConverter;
 
-    static Long RECIPE_ID = 1L;
-    static Long INGREDIENT_ID_1 = 1L;
-    static Long INGREDIENT_ID_2 = 2L;
-    static Long INGREDIENT_ID_3 = 3L;
+    static String RECIPE_ID = "1";
+    static String INGREDIENT_ID_1 = "1";
+    static String INGREDIENT_ID_2 = "2";
+    static String INGREDIENT_ID_3 = "3";
 
     IngredientServiceImplTest() {
         this.ingredientToIngredientCommandConverter = new IngredientToIngredientCommandConverter(new UnitOfMeasureToUomCommandConverter());
@@ -72,14 +72,14 @@ class IngredientServiceImplTest {
 
         Optional<Recipe> recipeOptional = Optional.of(recipe);
 
-        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+        when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
 
         IngredientCommand command = ingredientService.findByRecipeIdAndIngredientId(RECIPE_ID, INGREDIENT_ID_3);
 
         assertNotNull(command);
         assertEquals(RECIPE_ID, command.getRecipeId());
         assertEquals(INGREDIENT_ID_3, command.getId());
-        verify(recipeRepository).findById(anyLong());
+        verify(recipeRepository).findById(anyString());
     }
 
     @Test
@@ -102,13 +102,13 @@ class IngredientServiceImplTest {
         ingredientInSavedRecipe.setId(INGREDIENT_ID_1);
         savedRecipe.addIngredient(ingredientInSavedRecipe);
 
-        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+        when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
         when(recipeRepository.save(any())).thenReturn(savedRecipe);
 
         IngredientCommand savedIngredientCommand = ingredientService.saveIngredientCommand(command);
 
         assertEquals(INGREDIENT_ID_1, savedIngredientCommand.getId());
-        verify(recipeRepository).findById(anyLong());
+        verify(recipeRepository).findById(anyString());
         verify(recipeRepository).save(any(Recipe.class));
     }
 
@@ -124,7 +124,7 @@ class IngredientServiceImplTest {
 
         ingredientService.deleteById(RECIPE_ID, INGREDIENT_ID_1);
 
-        verify(recipeRepository).findById(anyLong());
+        verify(recipeRepository).findById(anyString());
         verify(recipeRepository).save(any(Recipe.class));
     }
 }

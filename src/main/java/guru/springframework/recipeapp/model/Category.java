@@ -1,21 +1,22 @@
 package guru.springframework.recipeapp.model;
 
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
+import javax.persistence.Id;
 import java.util.Set;
 
-@Data
-@EqualsAndHashCode(exclude = {"recipes"})
-@Entity
+@Getter
+@Setter
+@Document
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String description;
 
-    @ManyToMany(mappedBy = "categories")
-    private Set<Recipe> recipes;
+//    @DBRef
+//    private Set<Recipe> recipes;
 
 }

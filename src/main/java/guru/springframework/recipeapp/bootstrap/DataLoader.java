@@ -31,7 +31,89 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         log.debug("Loading data");
+        loadCategories();
+        loadUom();
         recipeRepository.saveAll(getRecipes());
+    }
+
+    private void loadCategories(){
+        Category cat1 = new Category();
+        cat1.setDescription("Scandinavian");
+        categoryRepository.save(cat1);
+
+        Category cat2 = new Category();
+        cat2.setDescription("French");
+        categoryRepository.save(cat2);
+
+        Category cat3 = new Category();
+        cat3.setDescription("Italian");
+        categoryRepository.save(cat3);
+
+        Category cat4 = new Category();
+        cat4.setDescription("Mexican");
+        categoryRepository.save(cat4);
+
+        Category cat5 = new Category();
+        cat5.setDescription("Asian");
+        categoryRepository.save(cat5);
+
+        Category cat6 = new Category();
+        cat6.setDescription("Fast Food");
+        categoryRepository.save(cat6);
+    }
+
+    private void loadUom(){
+        UnitOfMeasure uom1 = new UnitOfMeasure();
+        uom1.setDescription("tsp");
+        unitOfMeasureRepository.save(uom1);
+
+        UnitOfMeasure uom2 = new UnitOfMeasure();
+        uom2.setDescription("tblsp");
+        unitOfMeasureRepository.save(uom2);
+
+        UnitOfMeasure uom3 = new UnitOfMeasure();
+        uom3.setDescription("cup");
+        unitOfMeasureRepository.save(uom3);
+
+        UnitOfMeasure uom4 = new UnitOfMeasure();
+        uom4.setDescription("pint");
+        unitOfMeasureRepository.save(uom4);
+
+        UnitOfMeasure uom5 = new UnitOfMeasure();
+        uom5.setDescription("ounce");
+        unitOfMeasureRepository.save(uom5);
+
+        UnitOfMeasure uom6 = new UnitOfMeasure();
+        uom6.setDescription("pinch");
+        unitOfMeasureRepository.save(uom6);
+
+        UnitOfMeasure uom7 = new UnitOfMeasure();
+        uom7.setDescription("dash");
+        unitOfMeasureRepository.save(uom7);
+
+        UnitOfMeasure uom8 = new UnitOfMeasure();
+        uom8.setDescription("g");
+        unitOfMeasureRepository.save(uom8);
+
+        UnitOfMeasure uom9 = new UnitOfMeasure();
+        uom9.setDescription("l");
+        unitOfMeasureRepository.save(uom9);
+
+        UnitOfMeasure uom10 = new UnitOfMeasure();
+        uom10.setDescription("dl");
+        unitOfMeasureRepository.save(uom10);
+
+        UnitOfMeasure uom11 = new UnitOfMeasure();
+        uom11.setDescription("ml");
+        unitOfMeasureRepository.save(uom11);
+
+        UnitOfMeasure uom12 = new UnitOfMeasure();
+        uom12.setDescription("pcs");
+        unitOfMeasureRepository.save(uom12);
+
+        UnitOfMeasure uom13 = new UnitOfMeasure();
+        uom13.setDescription("each");
+        unitOfMeasureRepository.save(uom13);
     }
 
     private List<Recipe> getRecipes() {
