@@ -84,9 +84,30 @@ public class RecipeControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", "")
                 .param("description", "great description")
+                .param("prepTime", "1")
+                .param("cookTime", "8")
+                .param("servings", "1")
+                .param("url", "https://google.com")
+                .param("directions", "Cook it rightly!")
         )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:recipe/" + command.getId()));
+    }
+
+    @Test
+    public void testSaveRecipeHasError() throws Exception {
+        RecipeCommand command = new RecipeCommand();
+        command.setId(2L);
+
+        when(recipeService.saveRecipeCommand(any())).thenReturn(command);
+
+        mockMvc.perform(post("/recipe")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("id", "")
+                .param("description", "great description")
+        )
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/recipe_form"));
     }
 
     @Test
