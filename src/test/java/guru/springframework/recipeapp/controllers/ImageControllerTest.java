@@ -1,6 +1,7 @@
 package guru.springframework.recipeapp.controllers;
 
 import guru.springframework.recipeapp.commands.RecipeCommand;
+import guru.springframework.recipeapp.exceptions.NotFoundException;
 import guru.springframework.recipeapp.services.ImageService;
 import guru.springframework.recipeapp.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -113,10 +114,10 @@ class ImageControllerTest {
     }
 
     @Test
-    @Disabled
-    void testNumberFormatException() throws Exception {
+    void testRecipeNotFoundException() throws Exception {
+        when(recipeService.findCommandById(anyString())).thenThrow(NotFoundException.class);
+
         mockMvc.perform(get("/recipe/hello/recipe-image"))
-                .andExpect(status().isBadRequest())
-                .andExpect(view().name("400error"));
+                .andExpect(status().isBadRequest());
     }
 }

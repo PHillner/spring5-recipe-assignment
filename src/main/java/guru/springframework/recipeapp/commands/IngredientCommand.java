@@ -14,18 +14,18 @@ public class IngredientCommand {
     private String recipeId;
     private String description;
     private BigDecimal amount;
-    private UnitOfMeasureCommand uomCommand;
+    private UnitOfMeasureCommand uom;
 
     public String toString() {
         String unitString = " ";
-        if (uomCommand != null && uomCommand.getDescription() != null) {
-            switch (uomCommand.getDescription()) {
+        if (uom != null && uom.getDescription() != null) {
+            switch (uom.getDescription()) {
                 case "each":
                 case "pcs":
                     unitString = "";
                     break;
                 default:
-                    unitString += uomCommand.getDescription();
+                    unitString += uom.getDescription();
                     break;
             }
         }

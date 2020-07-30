@@ -60,14 +60,6 @@ public class RecipeControllerTest {
     }
 
     @Test
-    @Disabled
-    public void testGetRecipePageNumberFormatException() throws Exception {
-        mockMvc.perform(get("/recipe/hello"))
-                .andExpect(status().is4xxClientError())
-                .andExpect(view().name("400error"));
-    }
-
-    @Test
     public void testNewRecipePage() throws Exception {
         mockMvc.perform(get("/recipe/new"))
                 .andExpect(status().isOk())

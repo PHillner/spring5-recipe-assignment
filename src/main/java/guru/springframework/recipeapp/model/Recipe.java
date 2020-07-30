@@ -32,7 +32,6 @@ public class Recipe {
     private Set<Category> categories = new HashSet<>();
 
     public Recipe addIngredient(Ingredient ingredient) {
-//        ingredient.setRecipe(this);
         this.ingredients.add(ingredient);
         return this;
     }
@@ -44,9 +43,6 @@ public class Recipe {
 
     public void setNotes(Notes notes) {
         this.notes = notes;
-//        if (notes != null && notes.getRecipe() != this) {
-//            notes.setRecipe(this);
-//        }
     }
 
 }

@@ -50,7 +50,7 @@ class IngredientToIngredientCommandConverterTest {
         assertEquals(ID_INGREDIENT_VALUE, command.getId());
         assertEquals(DESCRIPTION_INGREDIENT_VALUE, command.getDescription());
         assertEquals(AMOUNT, command.getAmount());
-        assertNotNull(command.getUomCommand());
-        assertEquals(command.getUomCommand().getId(), UOM_ID);
+        assertNotNull(command.getUom());
+        assertEquals(command.getUom().getId(), UOM_ID);
     }
 }

@@ -2,6 +2,7 @@ package guru.springframework.recipeapp.controllers;
 
 import guru.springframework.recipeapp.commands.IngredientCommand;
 import guru.springframework.recipeapp.commands.RecipeCommand;
+import guru.springframework.recipeapp.exceptions.NotFoundException;
 import guru.springframework.recipeapp.services.IngredientService;
 import guru.springframework.recipeapp.services.RecipeService;
 import guru.springframework.recipeapp.services.UnitOfMeasureService;
@@ -143,10 +144,10 @@ class IngredientControllerTest {
     }
 
     @Test
-    @Disabled
-    void testNumberFormatException() throws Exception {
+    void testRecipeNotFoundException() throws Exception {
+        when(recipeService.findCommandById(anyString())).thenThrow(NotFoundException.class);
+
         mockMvc.perform(get("/recipe/hello/ingredients"))
-                .andExpect(status().isBadRequest())
-                .andExpect(view().name("400error"));
+                .andExpect(status().isBadRequest());
     }
 }

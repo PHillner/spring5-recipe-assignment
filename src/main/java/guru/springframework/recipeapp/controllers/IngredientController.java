@@ -3,13 +3,16 @@ package guru.springframework.recipeapp.controllers;
 import guru.springframework.recipeapp.commands.IngredientCommand;
 import guru.springframework.recipeapp.commands.RecipeCommand;
 import guru.springframework.recipeapp.commands.UnitOfMeasureCommand;
+import guru.springframework.recipeapp.exceptions.NotFoundException;
 import guru.springframework.recipeapp.services.IngredientService;
 import guru.springframework.recipeapp.services.RecipeService;
 import guru.springframework.recipeapp.services.UnitOfMeasureService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @Controller
@@ -46,7 +49,7 @@ public class IngredientController {
 
         IngredientCommand ingredientCommand = new IngredientCommand();
         ingredientCommand.setRecipeId(recipeId);
-        ingredientCommand.setUomCommand(new UnitOfMeasureCommand());
+        ingredientCommand.setUom(new UnitOfMeasureCommand());
         model.addAttribute("ingredient", ingredientCommand);
         model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
         log.debug("Returning new ingredient form, recipeId: " + recipeId);
@@ -73,5 +76,14 @@ public class IngredientController {
         ingredientService.deleteById(recipeId, id);
         log.debug("Removed ingredient, recipeId: " + recipeId + ", id: " + id);
         return String.format("redirect:/recipe/%s/ingredients", recipeId);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NotFoundException.class)
+    public ModelAndView handleNotFound(Exception exception) {
+        log.error("Handling NotFoundException for recipe");
+        log.error(exception.getMessage());
+        ModelAndView mav = new ModelAndView();
+        return mav;
     }
 }

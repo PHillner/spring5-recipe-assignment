@@ -43,14 +43,14 @@ public class RecipeToRecipeCommandConverter implements Converter<Recipe, RecipeC
         command.setDirections(source.getDirections());
         command.setIngredients(
                 source.getIngredients().stream()
-                        .map(i -> toIngredientCommandConverter.convert(i)).collect(Collectors.toSet())
+                        .map(i -> toIngredientCommandConverter.convert(i)).collect(Collectors.toList())
         );
         command.setImage(source.getImage());
         command.setDifficulty(source.getDifficulty());
         command.setNotes(toNotesCommandConverter.convert(source.getNotes()));
         command.setCategories(
                 source.getCategories().stream()
-                        .map(c -> toCategoryCommandConverter.convert(c)).collect(Collectors.toSet())
+                        .map(c -> toCategoryCommandConverter.convert(c)).collect(Collectors.toList())
         );
         return command;
     }

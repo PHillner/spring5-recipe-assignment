@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class RecipeAppApplicationTests {
 
-//    @Test TODO fix
+    @Test
     void contextLoads() {
     }
 
