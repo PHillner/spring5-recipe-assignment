@@ -56,12 +56,15 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand) {
-        Recipe recipe = recipeRepository.findById(ingredientCommand.getRecipeId()).orElseThrow();
+        Recipe recipe = recipeRepository.findById(ingredientCommand.getRecipeId()).orElseThrow(
+                () -> new NotFoundException("Recipe not found. ID: " + ingredientCommand.getRecipeId())
+        );
 
         Optional<Ingredient> ingredientOptional = recipe.getIngredients()
                 .stream()
                 .filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
                 .findFirst();
+        log.debug("ingredientOptional.isPresent(): " + ingredientOptional.isPresent());
 
         if (ingredientOptional.isPresent()){
             Ingredient ingredientFound = ingredientOptional.get();
@@ -69,7 +72,10 @@ public class IngredientServiceImpl implements IngredientService {
             ingredientFound.setAmount(ingredientCommand.getAmount());
             ingredientFound.setUom(unitOfMeasureRepository
                     .findById(ingredientCommand.getUom().getId())
-                    .orElseThrow(() -> new RuntimeException("UOM not found")));
+                    .orElseThrow(
+                            () -> new RuntimeException("Bad UOM id. Are you fiddling with something there?")
+                    )
+            );
         } else {
             // Add new Ingredient
             Ingredient ingredient = commandToIngredientConverter.convert(ingredientCommand);
@@ -101,7 +107,7 @@ public class IngredientServiceImpl implements IngredientService {
             assert ingredientCommandSaved != null;
             ingredientCommandSaved.setRecipeId(recipe.getId());
         } else {
-            throw new NoSuchElementException();
+            throw new NotFoundException("Unable to identify given ingredient after it being saved.");
         }
 
         return ingredientCommandSaved;

@@ -1,17 +1,14 @@
 package guru.springframework.recipeapp.controllers;
 
 import guru.springframework.recipeapp.commands.RecipeCommand;
-import guru.springframework.recipeapp.exceptions.NotFoundException;
 import guru.springframework.recipeapp.services.ImageService;
 import guru.springframework.recipeapp.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
@@ -50,7 +47,7 @@ public class ImageController {
     public void renderImageFromDB(@PathVariable String id, HttpServletResponse response) throws IOException {
         RecipeCommand recipeCommand = recipeService.findCommandById(id);
 
-        if (recipeCommand.getImage() != null) {
+        if (recipeCommand.getImage() != null && recipeCommand.getImage().length > 0) {
             log.debug("Fetching image, id: " + recipeCommand.getId());
             byte[] byteArray = new byte[recipeCommand.getImage().length];
             int i = 0;
@@ -79,14 +76,5 @@ public class ImageController {
         InputStream is = new ByteArrayInputStream(image);
         IOUtils.copy(is, response.getOutputStream());
         is.close();
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(NotFoundException.class)
-    public ModelAndView handleNotFound(Exception exception) {
-        log.error("Handling NotFoundException for recipe");
-        log.error(exception.getMessage());
-        ModelAndView mav = new ModelAndView();
-        return mav;
     }
 }

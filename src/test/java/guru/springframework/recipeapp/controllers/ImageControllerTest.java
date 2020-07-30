@@ -5,7 +5,6 @@ import guru.springframework.recipeapp.exceptions.NotFoundException;
 import guru.springframework.recipeapp.services.ImageService;
 import guru.springframework.recipeapp.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -41,7 +40,7 @@ class ImageControllerTest {
 
         controller = new ImageController(imageService, recipeService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setControllerAdvice(new ControllerExeptionHandler())
+                .setControllerAdvice(new ControllerExceptionHandler())
                 .build();
     }
 
@@ -118,6 +117,6 @@ class ImageControllerTest {
         when(recipeService.findCommandById(anyString())).thenThrow(NotFoundException.class);
 
         mockMvc.perform(get("/recipe/hello/recipe-image"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 }

@@ -1,15 +1,12 @@
 package guru.springframework.recipeapp.controllers;
 
 import guru.springframework.recipeapp.commands.RecipeCommand;
-import guru.springframework.recipeapp.exceptions.NotFoundException;
 import guru.springframework.recipeapp.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
@@ -67,16 +64,5 @@ public class RecipeController {
     public String removeRecipe(@PathVariable("id") String id) {
         recipeService.deleteById(id);
         return "redirect:/";
-    }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NotFoundException.class)
-    public ModelAndView handleNotFound(Exception exception) {
-        log.error("Handling NotFoundException for recipe");
-        log.error(exception.getMessage());
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("404error");
-        mav.addObject("exception", exception);
-        return mav;
     }
 }

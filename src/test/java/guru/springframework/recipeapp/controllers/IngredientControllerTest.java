@@ -7,7 +7,6 @@ import guru.springframework.recipeapp.services.IngredientService;
 import guru.springframework.recipeapp.services.RecipeService;
 import guru.springframework.recipeapp.services.UnitOfMeasureService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -46,7 +45,7 @@ class IngredientControllerTest {
 
         controller = new IngredientController(ingredientService, recipeService, unitOfMeasureService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setControllerAdvice(new ControllerExeptionHandler())
+                .setControllerAdvice(new ControllerExceptionHandler())
                 .build();
     }
 
@@ -148,6 +147,6 @@ class IngredientControllerTest {
         when(recipeService.findCommandById(anyString())).thenThrow(NotFoundException.class);
 
         mockMvc.perform(get("/recipe/hello/ingredients"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 }
