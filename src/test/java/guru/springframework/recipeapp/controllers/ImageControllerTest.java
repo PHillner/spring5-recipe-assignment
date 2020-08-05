@@ -65,6 +65,8 @@ class ImageControllerTest {
                 new MockMultipartFile("imagefile", "test_image.png", "text/plain",
                         "Some bytes from a file".getBytes());
 
+        when(imageService.saveImageFile(anyString(), any())).thenReturn(Mono.empty());
+
         mockMvc.perform(multipart("/recipe/1/image").file(multipartFile))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/recipe/1"));
@@ -103,7 +105,7 @@ class ImageControllerTest {
     void testRenderOnionsImage() throws Exception {
         byte[] bytes = "test image".getBytes();
 
-        when(imageService.getOnionsImage()).thenReturn(bytes);
+        when(imageService.getOnionsImage()).thenReturn(Mono.just(bytes));
 
         MockHttpServletResponse response = mockMvc.perform(get("/error/onions"))
                 .andExpect(status().isOk())
