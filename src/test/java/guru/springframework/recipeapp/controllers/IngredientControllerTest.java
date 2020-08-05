@@ -13,8 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.HashSet;
+import reactor.core.publisher.Flux;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -83,7 +82,7 @@ class IngredientControllerTest {
         command.setId("1");
 
         when(recipeService.findCommandById(anyString())).thenReturn(command);
-        when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
+        when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.empty());
 
         mockMvc.perform(get("/recipe/1/ingredient/new"))
                 .andExpect(status().isOk())
@@ -102,7 +101,7 @@ class IngredientControllerTest {
         command.setRecipeId("2");
 
         when(ingredientService.findByRecipeIdAndIngredientId(anyString(),anyString())).thenReturn(command);
-        when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
+        when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.empty());
 
         mockMvc.perform(get("/recipe/2/ingredient/4/edit"))
                 .andExpect(status().isOk())

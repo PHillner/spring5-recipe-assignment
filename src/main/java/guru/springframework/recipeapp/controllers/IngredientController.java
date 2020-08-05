@@ -48,7 +48,7 @@ public class IngredientController {
         ingredientCommand.setRecipeId(recipeId);
         ingredientCommand.setUom(new UnitOfMeasureCommand());
         model.addAttribute("ingredient", ingredientCommand);
-        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+        model.addAttribute("uomList", unitOfMeasureService.listAllUoms().collectList().block());
         log.debug("Returning new ingredient form, recipeId: " + recipeId);
         return "recipe/ingredient/ingredient_form";
     }
@@ -56,7 +56,7 @@ public class IngredientController {
     @GetMapping({"recipe/{recipeId}/ingredient/{id}/edit"})
     public String editIngredient(Model model, @PathVariable("recipeId") String recipeId, @PathVariable("id") String id) {
         model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id));
-        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+        model.addAttribute("uomList", unitOfMeasureService.listAllUoms().collectList().block());
         log.debug("Returning ingredient edit form, recipeId: " + recipeId + ", id: " + id);
         return "recipe/ingredient/ingredient_form";
     }
