@@ -1,9 +1,9 @@
 package guru.springframework.recipeapp.bootstrap;
 
 import guru.springframework.recipeapp.model.*;
-import guru.springframework.recipeapp.repositories.CategoryRepository;
-import guru.springframework.recipeapp.repositories.RecipeRepository;
-import guru.springframework.recipeapp.repositories.UnitOfMeasureRepository;
+import guru.springframework.recipeapp.repositories.reactive.CategoryReactiveRepository;
+import guru.springframework.recipeapp.repositories.reactive.RecipeReactiveRepository;
+import guru.springframework.recipeapp.repositories.reactive.UnitOfMeasureReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -17,11 +17,11 @@ import java.util.*;
 @Component
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
-    private final CategoryRepository categoryRepository;
-    private final RecipeRepository recipeRepository;
-    private final UnitOfMeasureRepository unitOfMeasureRepository;
+    private final CategoryReactiveRepository categoryRepository;
+    private final RecipeReactiveRepository recipeRepository;
+    private final UnitOfMeasureReactiveRepository unitOfMeasureRepository;
 
-    public DataLoader(CategoryRepository categoryRepository, RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
+    public DataLoader(CategoryReactiveRepository categoryRepository, RecipeReactiveRepository recipeRepository, UnitOfMeasureReactiveRepository unitOfMeasureRepository) {
         this.categoryRepository = categoryRepository;
         this.recipeRepository = recipeRepository;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
@@ -33,87 +33,87 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         log.debug("Loading data");
         loadCategories();
         loadUom();
-        recipeRepository.saveAll(getRecipes());
+        recipeRepository.saveAll(getRecipes()).blockFirst();
     }
 
     private void loadCategories(){
         Category cat1 = new Category();
         cat1.setDescription("Scandinavian");
-        categoryRepository.save(cat1);
+        categoryRepository.save(cat1).block();
 
         Category cat2 = new Category();
         cat2.setDescription("French");
-        categoryRepository.save(cat2);
+        categoryRepository.save(cat2).block();
 
         Category cat3 = new Category();
         cat3.setDescription("Italian");
-        categoryRepository.save(cat3);
+        categoryRepository.save(cat3).block();
 
         Category cat4 = new Category();
         cat4.setDescription("Mexican");
-        categoryRepository.save(cat4);
+        categoryRepository.save(cat4).block();
 
         Category cat5 = new Category();
         cat5.setDescription("Asian");
-        categoryRepository.save(cat5);
+        categoryRepository.save(cat5).block();
 
         Category cat6 = new Category();
         cat6.setDescription("Fast Food");
-        categoryRepository.save(cat6);
+        categoryRepository.save(cat6).block();
     }
 
     private void loadUom(){
         UnitOfMeasure uom1 = new UnitOfMeasure();
         uom1.setDescription("tsp");
-        unitOfMeasureRepository.save(uom1);
+        unitOfMeasureRepository.save(uom1).block();
 
         UnitOfMeasure uom2 = new UnitOfMeasure();
         uom2.setDescription("tblsp");
-        unitOfMeasureRepository.save(uom2);
+        unitOfMeasureRepository.save(uom2).block();
 
         UnitOfMeasure uom3 = new UnitOfMeasure();
         uom3.setDescription("cup");
-        unitOfMeasureRepository.save(uom3);
+        unitOfMeasureRepository.save(uom3).block();
 
         UnitOfMeasure uom4 = new UnitOfMeasure();
         uom4.setDescription("pint");
-        unitOfMeasureRepository.save(uom4);
+        unitOfMeasureRepository.save(uom4).block();
 
         UnitOfMeasure uom5 = new UnitOfMeasure();
         uom5.setDescription("ounce");
-        unitOfMeasureRepository.save(uom5);
+        unitOfMeasureRepository.save(uom5).block();
 
         UnitOfMeasure uom6 = new UnitOfMeasure();
         uom6.setDescription("pinch");
-        unitOfMeasureRepository.save(uom6);
+        unitOfMeasureRepository.save(uom6).block();
 
         UnitOfMeasure uom7 = new UnitOfMeasure();
         uom7.setDescription("dash");
-        unitOfMeasureRepository.save(uom7);
+        unitOfMeasureRepository.save(uom7).block();
 
         UnitOfMeasure uom8 = new UnitOfMeasure();
         uom8.setDescription("g");
-        unitOfMeasureRepository.save(uom8);
+        unitOfMeasureRepository.save(uom8).block();
 
         UnitOfMeasure uom9 = new UnitOfMeasure();
         uom9.setDescription("l");
-        unitOfMeasureRepository.save(uom9);
+        unitOfMeasureRepository.save(uom9).block();
 
         UnitOfMeasure uom10 = new UnitOfMeasure();
         uom10.setDescription("dl");
-        unitOfMeasureRepository.save(uom10);
+        unitOfMeasureRepository.save(uom10).block();
 
         UnitOfMeasure uom11 = new UnitOfMeasure();
         uom11.setDescription("ml");
-        unitOfMeasureRepository.save(uom11);
+        unitOfMeasureRepository.save(uom11).block();
 
         UnitOfMeasure uom12 = new UnitOfMeasure();
         uom12.setDescription("pcs");
-        unitOfMeasureRepository.save(uom12);
+        unitOfMeasureRepository.save(uom12).block();
 
         UnitOfMeasure uom13 = new UnitOfMeasure();
         uom13.setDescription("each");
-        unitOfMeasureRepository.save(uom13);
+        unitOfMeasureRepository.save(uom13).block();
     }
 
     private List<Recipe> getRecipes() {
@@ -122,30 +122,23 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         log.debug("Fetching units and categories to be used in recipes...");
 
         // Get UOMs
-        Optional<UnitOfMeasure> teaspoonUnitOptional = unitOfMeasureRepository.findByDescription("tsp");
-        if (teaspoonUnitOptional.isEmpty()) throw new RuntimeException("Teaspoon unit not in db");
-        UnitOfMeasure teaspoonUnit = teaspoonUnitOptional.get();
-        Optional<UnitOfMeasure> tablespoonUnitOptional = unitOfMeasureRepository.findByDescription("tblsp");
-        if (tablespoonUnitOptional.isEmpty()) throw new RuntimeException("Tablespoon unit not in db");
-        UnitOfMeasure tablespoonUnit = tablespoonUnitOptional.get();
-        Optional<UnitOfMeasure> cupUnitOptional = unitOfMeasureRepository.findByDescription("cup");
-        if (cupUnitOptional.isEmpty()) throw new RuntimeException("Cup unit not in db");
-        UnitOfMeasure cupUnit = cupUnitOptional.get();
-        Optional<UnitOfMeasure> pintUnitOptional = unitOfMeasureRepository.findByDescription("pint");
-        if (pintUnitOptional.isEmpty()) throw new RuntimeException("Pint unit not in db");
-        UnitOfMeasure pintUnit = pintUnitOptional.get();
-        Optional<UnitOfMeasure> dashUnitOptional = unitOfMeasureRepository.findByDescription("dash");
-        if (dashUnitOptional.isEmpty()) throw new RuntimeException("Dash unit not in db");
-        UnitOfMeasure dashUnit = dashUnitOptional.get();
-        Optional<UnitOfMeasure> piecesUnitOptional = unitOfMeasureRepository.findByDescription("pcs");
-        if (piecesUnitOptional.isEmpty()) throw new RuntimeException("Pieces unit not in db");
-        UnitOfMeasure piecesUnit = piecesUnitOptional.get();
+        UnitOfMeasure teaspoonUnit = unitOfMeasureRepository.findByDescription("tsp").block();
+        if (teaspoonUnit == null) throw new RuntimeException("Teaspoon unit not in db");
+        UnitOfMeasure tablespoonUnit = unitOfMeasureRepository.findByDescription("tblsp").block();
+        if (tablespoonUnit == null) throw new RuntimeException("Tablespoon unit not in db");
+        UnitOfMeasure cupUnit = unitOfMeasureRepository.findByDescription("cup").block();
+        if (cupUnit == null) throw new RuntimeException("Cup unit not in db");
+        UnitOfMeasure pintUnit = unitOfMeasureRepository.findByDescription("pint").block();
+        if (pintUnit == null) throw new RuntimeException("Pint unit not in db");
+        UnitOfMeasure dashUnit = unitOfMeasureRepository.findByDescription("dash").block();
+        if (dashUnit == null) throw new RuntimeException("Dash unit not in db");
+        UnitOfMeasure piecesUnit = unitOfMeasureRepository.findByDescription("pcs").block();
+        if (piecesUnit == null) throw new RuntimeException("Pieces unit not in db");
         log.debug("Units of measure... Done");
 
         // Get category
-        Optional<Category> mexicanCategoryOptional = categoryRepository.findByDescription("Mexican");
-        if (mexicanCategoryOptional.isEmpty()) throw new RuntimeException("Mexican category not in db");
-        Category mexCategory = mexicanCategoryOptional.get();
+        Category mexCategory = categoryRepository.findByDescription("Mexican").block();
+        if (mexCategory == null) throw new RuntimeException("Mexican category not in db");
         log.debug("Categories... Done");
 
         log.debug("Initializing recipes...");
