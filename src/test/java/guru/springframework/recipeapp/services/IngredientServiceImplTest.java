@@ -38,7 +38,6 @@ class IngredientServiceImplTest {
     static String INGREDIENT_ID_1 = "1";
     static String INGREDIENT_ID_2 = "2";
     static String INGREDIENT_ID_3 = "3";
-    static String UOM_ID_1 = "1";
 
     IngredientServiceImplTest() {
         this.ingredientToIngredientCommandConverter = new IngredientToIngredientCommandConverter(new UnitOfMeasureToUomCommandConverter());
