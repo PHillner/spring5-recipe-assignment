@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -66,7 +67,7 @@ class IngredientControllerTest {
     void testShowIngredient() throws Exception {
         IngredientCommand command = new IngredientCommand();
 
-        when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(command);
+        when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(Mono.just(command));
 
         mockMvc.perform(get("/recipe/1/ingredient/2"))
                 .andExpect(status().isOk())
@@ -100,7 +101,7 @@ class IngredientControllerTest {
         command.setId("4");
         command.setRecipeId("2");
 
-        when(ingredientService.findByRecipeIdAndIngredientId(anyString(),anyString())).thenReturn(command);
+        when(ingredientService.findByRecipeIdAndIngredientId(anyString(),anyString())).thenReturn(Mono.just(command));
         when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.empty());
 
         mockMvc.perform(get("/recipe/2/ingredient/4/edit"))
@@ -119,7 +120,7 @@ class IngredientControllerTest {
         command.setId("4");
         command.setDescription("great description");
 
-        when(ingredientService.saveIngredientCommand(any())).thenReturn(command);
+        when(ingredientService.saveIngredientCommand(any())).thenReturn(Mono.just(command));
 
         mockMvc.perform(post("/recipe/2/ingredient")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -134,6 +135,8 @@ class IngredientControllerTest {
 
     @Test
     void testDeleteIngredient() throws Exception {
+        when(ingredientService.deleteById(anyString(), anyString())).thenReturn(Mono.empty());
+
         mockMvc.perform(get("/recipe/4/ingredient/23/remove"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/4/ingredients"));

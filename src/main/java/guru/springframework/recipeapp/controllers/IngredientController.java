@@ -34,7 +34,7 @@ public class IngredientController {
 
     @GetMapping({"recipe/{recipeId}/ingredient/{id}"})
     public String showIngredient(Model model, @PathVariable("recipeId") String recipeId, @PathVariable("id") String id) {
-        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id));
+        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id).block());
         log.debug("Returning ingredient, recipeId: " + recipeId + ", id: " + id);
         return "recipe/ingredient/show";
     }
@@ -55,7 +55,7 @@ public class IngredientController {
 
     @GetMapping({"recipe/{recipeId}/ingredient/{id}/edit"})
     public String editIngredient(Model model, @PathVariable("recipeId") String recipeId, @PathVariable("id") String id) {
-        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id));
+        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id).block());
         model.addAttribute("uomList", unitOfMeasureService.listAllUoms().collectList().block());
         log.debug("Returning ingredient edit form, recipeId: " + recipeId + ", id: " + id);
         return "recipe/ingredient/ingredient_form";
@@ -63,14 +63,14 @@ public class IngredientController {
 
     @PostMapping("recipe/{recipeId}/ingredient")
     public String saveOrUpdateIngredient(@ModelAttribute IngredientCommand command) {
-        IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
+        IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command).block();
         log.debug("Saved ingredient, recipeId: " + savedCommand.getRecipeId() + ", id: " + savedCommand.getId());
         return String.format("redirect:ingredient/%s", savedCommand.getId());
     }
 
     @GetMapping({"recipe/{recipeId}/ingredient/{id}/remove"})
     public String deleteIngredient(@PathVariable("recipeId") String recipeId, @PathVariable("id") String id) {
-        ingredientService.deleteById(recipeId, id);
+        ingredientService.deleteById(recipeId, id).block();
         log.debug("Removed ingredient, recipeId: " + recipeId + ", id: " + id);
         return String.format("redirect:/recipe/%s/ingredients", recipeId);
     }
