@@ -6,6 +6,7 @@ import guru.springframework.recipeapp.exceptions.NotFoundException;
 import guru.springframework.recipeapp.model.Recipe;
 import guru.springframework.recipeapp.repositories.reactive.RecipeReactiveRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -82,12 +83,7 @@ public class RecipeServiceImplTest {
     public void failFindById() {
         when(recipeReactiveRepository.findById(anyString())).thenReturn(Mono.empty());
 
-        NotFoundException notFoundException = assertThrows(
-                NotFoundException.class,
-                () -> recipeService.findById("1"),
-                "Expected NotFoundException, but got something else."
-        );
-        assertFalse(notFoundException.getMessage().isEmpty());
+        assertEquals(Mono.empty(), recipeService.findById("1"));
     }
 
     @Test

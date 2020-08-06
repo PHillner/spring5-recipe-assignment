@@ -27,14 +27,14 @@ public class IngredientController {
 
     @GetMapping({"recipe/{recipeId}/ingredients"})
     public String getIngredientList(Model model, @PathVariable("recipeId") String recipeId) {
-        model.addAttribute("recipe", recipeService.findCommandById(recipeId).block());
+        model.addAttribute("recipe", recipeService.findCommandById(recipeId));
         log.debug("Returning ingredients, recipeId: " + recipeId);
         return "recipe/ingredient/list";
     }
 
     @GetMapping({"recipe/{recipeId}/ingredient/{id}"})
     public String showIngredient(Model model, @PathVariable("recipeId") String recipeId, @PathVariable("id") String id) {
-        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id).block());
+        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id));
         log.debug("Returning ingredient, recipeId: " + recipeId + ", id: " + id);
         return "recipe/ingredient/show";
     }
@@ -48,15 +48,15 @@ public class IngredientController {
         ingredientCommand.setRecipeId(recipeId);
         ingredientCommand.setUom(new UnitOfMeasureCommand());
         model.addAttribute("ingredient", ingredientCommand);
-        model.addAttribute("uomList", unitOfMeasureService.listAllUoms().collectList().block());
+        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
         log.debug("Returning new ingredient form, recipeId: " + recipeId);
         return "recipe/ingredient/ingredient_form";
     }
 
     @GetMapping({"recipe/{recipeId}/ingredient/{id}/edit"})
     public String editIngredient(Model model, @PathVariable("recipeId") String recipeId, @PathVariable("id") String id) {
-        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id).block());
-        model.addAttribute("uomList", unitOfMeasureService.listAllUoms().collectList().block());
+        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id));
+        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
         log.debug("Returning ingredient edit form, recipeId: " + recipeId + ", id: " + id);
         return "recipe/ingredient/ingredient_form";
     }

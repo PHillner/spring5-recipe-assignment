@@ -33,9 +33,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Mono<Recipe> findById(String id) {
-        return Mono.just(recipeReactiveRepository.findById(id).blockOptional().orElseThrow(
-                () -> new NotFoundException("Recipe not found. ID: " + id)
-        ));
+        return recipeReactiveRepository.findById(id);
     }
 
     @Override
