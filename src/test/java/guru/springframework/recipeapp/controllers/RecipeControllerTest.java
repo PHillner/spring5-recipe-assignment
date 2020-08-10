@@ -2,130 +2,139 @@ package guru.springframework.recipeapp.controllers;
 
 import guru.springframework.recipeapp.commands.RecipeCommand;
 import guru.springframework.recipeapp.exceptions.NotFoundException;
+import guru.springframework.recipeapp.model.Notes;
 import guru.springframework.recipeapp.model.Recipe;
 import guru.springframework.recipeapp.services.RecipeService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Disabled
+@WebFluxTest(RecipeController.class)
+@Import(ThymeleafAutoConfiguration.class)
 public class RecipeControllerTest {
 
-    @Mock
+    @MockBean
     RecipeService recipeService;
 
-    RecipeController controller;
-    MockMvc mockMvc;
-
-    @BeforeEach()
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-
-        controller = new RecipeController(recipeService);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setControllerAdvice(new ControllerExceptionHandler())
-                .build();
-    }
+    @Autowired
+    WebTestClient webTestClient;
 
     @Test
-    public void testGetRecipePage() throws Exception {
-
+    public void testGetRecipePage() {
         Recipe recipe = new Recipe();
         recipe.setId("1");
+        Notes notes = new Notes();
+        notes.setId("3");
+        notes.setRecipeNotes("Might be cool recipe");
+        recipe.setNotes(notes);
+
         when(recipeService.findById(anyString())).thenReturn(Mono.just(recipe));
 
-        mockMvc.perform(get("/recipe/" + recipe.getId()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("recipe/show"))
-                .andExpect(model().attributeExists("recipe"));
+        webTestClient.get()
+                .uri("/recipe/" + recipe.getId())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .consumeWith(response -> assertNotNull(response.getResponseBody()));
     }
 
     @Test
-    public void testGetRecipePageNotFound() throws Exception {
+    public void testGetRecipePageNotFound() {
         when(recipeService.findById(anyString())).thenThrow(NotFoundException.class);
 
-        mockMvc.perform(get("/recipe/1"))
-                .andExpect(status().isNotFound())
-                .andExpect(view().name("404error"));
+        webTestClient.get()
+                .uri("/recipe/1")
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody(String.class)
+                .consumeWith(response -> assertNotNull(response.getResponseBody()));
     }
 
     @Test
-    public void testNewRecipePage() throws Exception {
-        mockMvc.perform(get("/recipe/new"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("recipe/recipe_form"))
-                .andExpect(model().attributeExists("recipe"));
+    public void testNewRecipePage() {
+        Recipe recipe = new Recipe();
+
+        when(recipeService.findById(anyString())).thenReturn(Mono.just(recipe));
+
+        webTestClient.get()
+                .uri("/recipe/new")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .consumeWith(response -> assertNotNull(response.getResponseBody()));
     }
 
     @Test
-    public void testSaveRecipe() throws Exception {
+    public void testSaveRecipe() {
+        RecipeCommand command = new RecipeCommand();
+
+        when(recipeService.saveRecipeCommand(any())).thenReturn(Mono.just(command));
+
+        webTestClient.post()
+                .uri(String.format("/recipe?%s&%s&%s&%s&%s&%s&%s",
+                        "id=",
+                        "description=great+description",
+                        "prepTime=1",
+                        "cookTime=8",
+                        "servings=1",
+                        "url=https://google.com",
+                        "directions=Cook+it+rightly!"))
+                .exchange()
+                .expectStatus().is3xxRedirection();
+
+        verify(recipeService).saveRecipeCommand(any());
+    }
+
+    @Test
+    public void testSaveRecipeHasError() {
         RecipeCommand command = new RecipeCommand();
         command.setId("2");
 
         when(recipeService.saveRecipeCommand(any())).thenReturn(Mono.just(command));
 
-        mockMvc.perform(post("/recipe")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("id", "")
-                .param("description", "great description")
-                .param("prepTime", "1")
-                .param("cookTime", "8")
-                .param("servings", "1")
-                .param("url", "https://google.com")
-                .param("directions", "Cook it rightly!")
-        )
-                .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:recipe/" + command.getId()));
+        webTestClient.post()
+                .uri(String.format("/recipe?%s&%s",
+                        "id=",
+                        "description=great+description"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .consumeWith(response -> assertNotNull(response.getResponseBody()));
+
+        verify(recipeService, times(0)).saveRecipeCommand(any());
     }
 
     @Test
-    public void testSaveRecipeHasError() throws Exception {
-        RecipeCommand command = new RecipeCommand();
-        command.setId("2");
-
-        when(recipeService.saveRecipeCommand(any())).thenReturn(Mono.just(command));
-
-        mockMvc.perform(post("/recipe")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("id", "")
-                .param("description", "great description")
-        )
-                .andExpect(status().isOk())
-                .andExpect(view().name("recipe/recipe_form"));
-    }
-
-    @Test
-    public void testEditRecipePage() throws Exception {
+    public void testEditRecipePage() {
         RecipeCommand command = new RecipeCommand();
         command.setId("3");
 
         when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(command));
 
-        mockMvc.perform(get("/recipe/" + command.getId() + "/edit"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("recipe/recipe_form"))
-                .andExpect(model().attributeExists("recipe"));
+        webTestClient.get()
+                .uri("/recipe/" + command.getId() + "/edit")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .consumeWith(response -> assertNotNull(response.getResponseBody()));
     }
 
     @Test
-    public void testRemoveRecipe() throws Exception {
+    public void testRemoveRecipe() {
         when(recipeService.deleteById(anyString())).thenReturn(Mono.empty());
 
-        mockMvc.perform(get("/recipe/4/remove"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/"));
+        webTestClient.get()
+                .uri("/recipe/4/remove")
+                .exchange()
+                .expectStatus().is3xxRedirection();
 
         verify(recipeService).deleteById(anyString());
     }
