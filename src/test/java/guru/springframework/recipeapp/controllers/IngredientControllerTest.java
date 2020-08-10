@@ -2,6 +2,7 @@ package guru.springframework.recipeapp.controllers;
 
 import guru.springframework.recipeapp.commands.IngredientCommand;
 import guru.springframework.recipeapp.commands.RecipeCommand;
+import guru.springframework.recipeapp.commands.UnitOfMeasureCommand;
 import guru.springframework.recipeapp.exceptions.NotFoundException;
 import guru.springframework.recipeapp.services.IngredientService;
 import guru.springframework.recipeapp.services.RecipeService;
@@ -16,11 +17,12 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @WebFluxTest(IngredientController.class)
 @Import(ThymeleafAutoConfiguration.class)
@@ -85,7 +87,6 @@ class IngredientControllerTest {
                 .expectBody(String.class)
                 .consumeWith(response -> assertNotNull(response.getResponseBody()));
 
-        verify(recipeService).findCommandById(anyString());
         verify(unitOfMeasureService).listAllUoms();
     }
 
@@ -114,17 +115,41 @@ class IngredientControllerTest {
         IngredientCommand command = new IngredientCommand();
         command.setId("4");
         command.setDescription("great description");
+        command.setAmount(BigDecimal.valueOf(3L));
+        UnitOfMeasureCommand uomCommand = new UnitOfMeasureCommand();
+        uomCommand.setId("5");
+        command.setUom(uomCommand);
 
         when(ingredientService.saveIngredientCommand(any())).thenReturn(Mono.just(command));
 
         webTestClient.post()
-                .uri(String.format("/recipe/2/ingredient?%s&%s",
+                .uri(String.format("/recipe/2/ingredient?%s&%s&%s&%s",
                         "id=",
-                        "description=great+description"))
+                        "description=great+description",
+                        "amount=3",
+                        "uom.id=5"))
                 .exchange()
                 .expectStatus().is3xxRedirection();
 
         verify(ingredientService).saveIngredientCommand(any());
+    }
+
+    @Test
+    public void testSaveRecipeHasError() {
+        when(ingredientService.saveIngredientCommand(any())).thenReturn(Mono.empty());
+
+        webTestClient.post()
+                .uri(String.format("/recipe/2/ingredient?%s&%s&%s&%s",
+                        "id=4",
+                        "description=",
+                        "amount=3",
+                        "uom.id=5"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .consumeWith(response -> assertNotNull(response.getResponseBody()));
+
+        verify(ingredientService, times(0)).saveIngredientCommand(any());
     }
 
     @Test
