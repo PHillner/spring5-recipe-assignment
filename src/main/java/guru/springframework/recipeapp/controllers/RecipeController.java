@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,8 +19,15 @@ public class RecipeController {
 
     private final RecipeService recipeService;
 
+    private WebDataBinder webDataBinder;
+
     public RecipeController(RecipeService recipeService) {
         this.recipeService = recipeService;
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder webDataBinder) {
+        this.webDataBinder = webDataBinder;
     }
 
     @GetMapping({"recipe/{id}"})
@@ -39,13 +47,16 @@ public class RecipeController {
     @GetMapping({"recipe/{id}/edit"})
     public String editRecipe(Model model, @PathVariable("id") String id) {
         log.debug("Got request for recipe edit page, id: " + id);
-        model.addAttribute("recipe", recipeService.findCommandById(id).block());
+        model.addAttribute("recipe", recipeService.findCommandById(id));
         log.debug("Returning recipe edit form, id: " + id);
         return RECIPE_FORM_URL;
     }
 
     @PostMapping("recipe")
-    public String saveOrUpdateRecipe(@Valid @ModelAttribute("recipe") RecipeCommand command, BindingResult bindingResult) {
+    public String saveOrUpdateRecipe(@ModelAttribute("recipe") RecipeCommand command) {
+        webDataBinder.validate();
+        BindingResult bindingResult = webDataBinder.getBindingResult();
+
         if (bindingResult.hasErrors()) {
             // Log all errors
             bindingResult.getAllErrors().forEach(objectError -> {
@@ -54,14 +65,14 @@ public class RecipeController {
             return RECIPE_FORM_URL;
         }
 
-        RecipeCommand savedCommand = recipeService.saveRecipeCommand(command).block();
-        log.debug("Returning saved recipe, id: " + savedCommand.getId());
-        return String.format("redirect:recipe/%s", savedCommand.getId());
+        recipeService.saveRecipeCommand(command).subscribe();
+        log.debug("Returning saved recipe, id: " + command.getId());
+        return String.format("redirect:recipe/%s", command.getId());
     }
 
     @GetMapping({"recipe/{id}/remove"})
     public String removeRecipe(@PathVariable("id") String id) {
-        recipeService.deleteById(id).block();
+        recipeService.deleteById(id).subscribe();
         return "redirect:/";
     }
 }
