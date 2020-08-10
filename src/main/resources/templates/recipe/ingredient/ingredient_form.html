@@ -30,24 +30,36 @@
                         </div>
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-2 form-group">
+                                <div class="col-md-3 form-group" th:class="${#fields.hasErrors('amount')}
+                                ? 'col-md-3 form-group has-error' : 'col-md-3 form-group'">
                                     <label>Amount:</label>
-                                    <input type="number" class="form-control" th:field="*{amount}"/>
+                                    <input type="number" class="form-control" th:field="*{amount}" th:errorclass="has-error"/>
+                                    <span class="help-block" th:if="${#fields.hasErrors('amount')}">
+                                        <li th:each="err : ${#fields.errors('amount')}" th:text="${err}"/>
+                                    </span>
                                 </div>
 
-                                <div class="col-md-1 form-group">
+                                <div class="col-md-2 form-group" th:class="${#fields.hasErrors('uom.id')}
+                                ? 'col-md-2 form-group has-error' : 'col-md-2 form-group'">
                                     <label>UOM:</label>
-                                    <select class="form-control" name="uom.id">
+                                    <select class="form-control" name="uom.id" th:errorclass="has-error">
                                         <option th:each="uomEach : ${uomList}"
                                                 th:value="${uomEach.id}"
                                                 th:selected="${uomEach.id.equals(ingredient.uom.id)}"
                                                 th:text="${uomEach.description}">Each</option>
                                     </select>
+                                    <span class="help-block" th:if="${#fields.hasErrors('uom.id')}">
+                                        <li th:each="err : ${#fields.errors('uom.id')}" th:text="${err}"/>
+                                    </span>
                                 </div>
 
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-4 form-group" th:class="${#fields.hasErrors('description')}
+                                ? 'col-md-4 form-group has-error' : 'col-md-4 form-group'">
                                     <label>Description:</label>
-                                    <input type="text" class="form-control" th:field="*{description}"/>
+                                    <input type="text" class="form-control" th:field="*{description}" th:errorclass="has-error"/>
+                                    <span class="help-block" th:if="${#fields.hasErrors('description')}">
+                                        <li th:each="err : ${#fields.errors('description')}" th:text="${err}"/>
+                                    </span>
                                 </div>
                             </div>
                         </div>

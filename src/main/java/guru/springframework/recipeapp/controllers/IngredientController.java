@@ -1,7 +1,6 @@
 package guru.springframework.recipeapp.controllers;
 
 import guru.springframework.recipeapp.commands.IngredientCommand;
-import guru.springframework.recipeapp.commands.RecipeCommand;
 import guru.springframework.recipeapp.commands.UnitOfMeasureCommand;
 import guru.springframework.recipeapp.services.IngredientService;
 import guru.springframework.recipeapp.services.RecipeService;
@@ -9,20 +8,31 @@ import guru.springframework.recipeapp.services.UnitOfMeasureService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
 public class IngredientController {
 
+    private static final String INGREDIENT_FORM_URL = "recipe/ingredient/ingredient_form";
+
     private final IngredientService ingredientService;
     private final RecipeService recipeService;
     private final UnitOfMeasureService unitOfMeasureService;
+
+    private WebDataBinder webDataBinder;
 
     public IngredientController(IngredientService ingredientService, RecipeService recipeService, UnitOfMeasureService unitOfMeasureService) {
         this.ingredientService = ingredientService;
         this.recipeService = recipeService;
         this.unitOfMeasureService = unitOfMeasureService;
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder webDataBinder) {
+        this.webDataBinder = webDataBinder;
     }
 
     @GetMapping({"recipe/{recipeId}/ingredients"})
@@ -59,7 +69,19 @@ public class IngredientController {
     }
 
     @PostMapping("recipe/{recipeId}/ingredient")
-    public String saveOrUpdateIngredient(@ModelAttribute("ingredient") IngredientCommand command) {
+    public String saveOrUpdateIngredient(@ModelAttribute("ingredient") IngredientCommand command, Model model) {
+        webDataBinder.validate();
+        BindingResult bindingResult = webDataBinder.getBindingResult();
+
+        if (bindingResult.hasErrors()) {
+            // Log all errors
+            bindingResult.getAllErrors().forEach(objectError -> {
+                log.debug(objectError.toString());
+            });
+            model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+            return INGREDIENT_FORM_URL;
+        }
+
         log.debug("Saving ingredient, recipeId: " + command.getRecipeId() + ", id: " + command.getId());
         ingredientService.saveIngredientCommand(command).subscribe();
         return String.format("redirect:ingredient/%s", command.getId());
