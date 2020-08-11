@@ -58,7 +58,7 @@ public class IngredientServiceImpl implements IngredientService {
                 .map(recipe -> {
                     prepareSavingOfIngredient(
                             ingredientCommand,
-                            recipe);
+                            recipe).block();
 
                     Recipe savedRecipe = recipeReactiveRepository.save(recipe).block();
 
@@ -89,7 +89,7 @@ public class IngredientServiceImpl implements IngredientService {
                 });
     }
 
-    private void prepareSavingOfIngredient(IngredientCommand ingredientCommand, Recipe recipe) {
+    private Mono<Void> prepareSavingOfIngredient(IngredientCommand ingredientCommand, Recipe recipe) {
         Optional<Ingredient> ingredientOptional = recipe.getIngredients()
                 .stream()
                 .filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
@@ -115,6 +115,8 @@ public class IngredientServiceImpl implements IngredientService {
             ingredient.setId(UUID.randomUUID().toString());
             recipe.addIngredient(ingredient);
         }
+
+        return Mono.empty();
     }
 
     @Override

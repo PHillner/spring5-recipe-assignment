@@ -1,6 +1,7 @@
 package guru.springframework.recipeapp.services;
 
 import guru.springframework.recipeapp.commands.IngredientCommand;
+import guru.springframework.recipeapp.commands.UnitOfMeasureCommand;
 import guru.springframework.recipeapp.converters.IngredientCommandToIngredientConverter;
 import guru.springframework.recipeapp.converters.IngredientToIngredientCommandConverter;
 import guru.springframework.recipeapp.converters.UnitOfMeasureToUomCommandConverter;
@@ -18,8 +19,7 @@ import reactor.core.publisher.Mono;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class IngredientServiceImplTest {
 
@@ -99,6 +99,35 @@ class IngredientServiceImplTest {
         assertEquals(INGREDIENT_ID_1, savedIngredientCommand.getId());
         verify(recipeReactiveRepository).findById(anyString());
         verify(recipeReactiveRepository).save(any(Recipe.class));
+    }
+
+    @Test
+    void failSaveIngredientCommandByBadUom() {
+        IngredientCommand ingredientCommand = new IngredientCommand();
+        ingredientCommand.setId(INGREDIENT_ID_1);
+        ingredientCommand.setRecipeId(RECIPE_ID);
+        UnitOfMeasureCommand uomCommand = new UnitOfMeasureCommand();
+        uomCommand.setId("5");
+        ingredientCommand.setUom(uomCommand);
+
+        Recipe savedRecipe = new Recipe();
+        Ingredient ingredientInSavedRecipe = new Ingredient();
+        ingredientInSavedRecipe.setId(INGREDIENT_ID_1);
+        savedRecipe.addIngredient(ingredientInSavedRecipe);
+
+        when(recipeReactiveRepository.findById(anyString())).thenReturn(Mono.just(savedRecipe));
+        when(recipeReactiveRepository.save(any())).thenReturn(Mono.just(savedRecipe));
+        when(unitOfMeasureReactiveRepository.findById(anyString())).thenReturn(Mono.empty());
+
+        RuntimeException runtimeException = assertThrows(
+                RuntimeException.class,
+                () -> ingredientService.saveIngredientCommand(ingredientCommand).block(),
+                "Expected RuntimeException, but got something else."
+        );
+
+        assertNotNull(runtimeException);
+        verify(recipeReactiveRepository).findById(anyString());
+        verify(recipeReactiveRepository, times(0)).save(any(Recipe.class));
     }
 
     @Test
