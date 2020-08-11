@@ -6,17 +6,13 @@ import guru.springframework.recipeapp.exceptions.NotFoundException;
 import guru.springframework.recipeapp.model.Recipe;
 import guru.springframework.recipeapp.repositories.reactive.RecipeReactiveRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -24,7 +20,6 @@ import static org.mockito.Mockito.*;
 public class RecipeServiceImplTest {
 
     public static final String RECIPE_ID = "3";
-    public static final String RECIPE_FAIL_ID = "7";
 
     RecipeServiceImpl recipeService;
 
