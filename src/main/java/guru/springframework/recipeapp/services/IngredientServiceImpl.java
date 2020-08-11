@@ -58,11 +58,7 @@ public class IngredientServiceImpl implements IngredientService {
                 .map(recipe -> {
                     prepareSavingOfIngredient(
                             ingredientCommand,
-                            recipe,
-                            recipe.getIngredients()
-                                    .stream()
-                                    .filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
-                                    .findFirst());
+                            recipe);
 
                     Recipe savedRecipe = recipeReactiveRepository.save(recipe).block();
 
@@ -93,11 +89,15 @@ public class IngredientServiceImpl implements IngredientService {
                 });
     }
 
-    private void prepareSavingOfIngredient(IngredientCommand ingredientCommand, Recipe recipe, Optional<Ingredient> ingredientOptional) {
-        System.out.println("prepareSavingOfIngredient");
+    private void prepareSavingOfIngredient(IngredientCommand ingredientCommand, Recipe recipe) {
+        Optional<Ingredient> ingredientOptional = recipe.getIngredients()
+                .stream()
+                .filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
+                .findFirst();
+
         if (ingredientOptional.isPresent()){
             // Case update ingredient
-            System.out.println("Updating ingredient");
+            log.debug("Updating ingredient");
             Ingredient ingredientFound = ingredientOptional.get();
             ingredientFound.setDescription(ingredientCommand.getDescription());
             ingredientFound.setAmount(ingredientCommand.getAmount());
@@ -110,7 +110,7 @@ public class IngredientServiceImpl implements IngredientService {
             ingredientFound.setUom(uomIngredientFound);
         } else {
             // Case add new Ingredient
-            System.out.println("Adding new ingredient");
+            log.debug("Adding new ingredient");
             Ingredient ingredient = commandToIngredientConverter.convert(ingredientCommand);
             ingredient.setId(UUID.randomUUID().toString());
             recipe.addIngredient(ingredient);
