@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
 @Slf4j
 @Controller
@@ -55,7 +56,6 @@ public class IngredientController {
         ingredientCommand.setRecipeId(recipeId);
         ingredientCommand.setUom(new UnitOfMeasureCommand());
         model.addAttribute("ingredient", ingredientCommand);
-        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
         log.debug("Returning new ingredient form, recipeId: " + recipeId);
         return "recipe/ingredient/ingredient_form";
     }
@@ -63,7 +63,6 @@ public class IngredientController {
     @GetMapping({"recipe/{recipeId}/ingredient/{id}/edit"})
     public String editIngredient(Model model, @PathVariable("recipeId") String recipeId, @PathVariable("id") String id) {
         model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id));
-        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
         log.debug("Returning ingredient edit form, recipeId: " + recipeId + ", id: " + id);
         return "recipe/ingredient/ingredient_form";
     }
@@ -78,7 +77,6 @@ public class IngredientController {
             bindingResult.getAllErrors().forEach(objectError -> {
                 log.debug(objectError.toString());
             });
-            model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
             return INGREDIENT_FORM_URL;
         }
 
@@ -92,5 +90,10 @@ public class IngredientController {
         ingredientService.deleteById(recipeId, id).subscribe();
         log.debug("Removed ingredient, recipeId: " + recipeId + ", id: " + id);
         return String.format("redirect:/recipe/%s/ingredients", recipeId);
+    }
+
+    @ModelAttribute("uomList")
+    public Flux<UnitOfMeasureCommand> populateUomList() {
+        return unitOfMeasureService.listAllUoms();
     }
 }
