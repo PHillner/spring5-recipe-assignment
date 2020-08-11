@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.support.WebExchangeBindException;
 import org.thymeleaf.exceptions.TemplateInputException;
 
 @Slf4j
@@ -14,7 +15,7 @@ import org.thymeleaf.exceptions.TemplateInputException;
 public class ControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler({RuntimeException.class, WebExchangeBindException.class})
     public String handleBadRequest(Exception exception, Model model) {
         log.error("Handling bad request exception");
         log.error(exception.getMessage());
